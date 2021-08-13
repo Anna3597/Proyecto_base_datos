@@ -237,3 +237,32 @@ END;
 $$
 LANGUAGE plpgsql;
 
+--------------------------
+//igual verficala la  tabla orde_venta si borra vuelve actualizar  el id
+CREATE OR REPLACE FUNCTION verifica_borrado_orden_venta()
+RETURNS trigger AS
+$$
+declare maxid int;
+begin
+if(exists(select (No_venta) from ORDEN_VENTA)) then
+select (max(No_venta)+1) from ORDEN_VENTA into maxid;
+execute 'alter SEQUENCE orden_venta_no_venta_seq  RESTART with '|| maxid;
+return new;
+else
+execute 'alter SEQUENCE orden_venta_no_venta_seq  RESTART with '|| 1;
+return new;
+end if;
+END;
+$$
+LANGUAGE plpgsql;
+
+
+//se crea  el trigger por si haceel borrado
+CREATE TRIGGER trigger_borrado_orden
+after delete
+ON ORDEN_VENTA
+FOR EACH ROW
+EXECUTE PROCEDURE verifica_borrado_orden_func();
+
+
+
