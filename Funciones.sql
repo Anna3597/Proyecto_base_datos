@@ -46,7 +46,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
-//se crea  el trigger por si haceel borrado
+--se crea  el trigger por si haceel borrado
 CREATE TRIGGER trigger_borrar_detalle_venta
 after delete
 ON DETALLE_VENTA
